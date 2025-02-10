@@ -1,7 +1,8 @@
 package hexlet.code;
 
+import hexlet.code.schemas.BaseSchema;
 import org.junit.jupiter.api.Test;
-
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -93,6 +94,48 @@ public class ValidatorTest {
         boolean expected = false;
         var actualSchema = new Validator().map();
         var result = actualSchema.required().sizeof(2).isValid(null);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testMapIsValidShapeTrue() {
+        boolean expected = true;
+        var v = new Validator();
+        var actualSchema = v.map();
+        Map<String, BaseSchema<String>> schemas = new HashMap<>();
+        schemas.put("firstName", v.string().required());
+        schemas.put("lastName", v.string().required().minLength(2));
+        actualSchema.shape(schemas);
+        var result = actualSchema.isValid(Map.of("firstName", "John", "lastName", "Smith"));
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testMapIsValidShapeFalse() {
+        boolean expected = false;
+        var v = new Validator();
+        var actualSchema = v.map();
+        Map<String, BaseSchema<String>> schemas = new HashMap<>();
+        schemas.put("firstName", v.string().required());
+        schemas.put("lastName", v.string().required().minLength(2));
+        actualSchema.shape(schemas);
+        var result = actualSchema.isValid(Map.of("firstName", "Anna", "lastName", "B"));
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testMapIsValidShapeNull() {
+        boolean expected = false;
+        var v = new Validator();
+        var actualSchema = v.map();
+        Map<String, BaseSchema<String>> schemas = new HashMap<>();
+        schemas.put("firstName", v.string().required());
+        schemas.put("lastName", v.string().required().minLength(2));
+        actualSchema.shape(schemas);
+        Map<String, String> human1 = new HashMap<>();
+        human1.put("firstName", "John");
+        human1.put("lastName", null);
+        var result = actualSchema.isValid(human1);
         assertEquals(expected, result);
     }
 }
