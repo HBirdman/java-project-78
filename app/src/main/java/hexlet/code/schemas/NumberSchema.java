@@ -6,8 +6,8 @@ public class NumberSchema extends BaseSchema<Integer> {
     protected Integer rangeMin;
     protected Integer rangeMax;
 
-    public boolean isValid(Integer numbers) {
-        number = numbers;
+    public boolean isValid(Integer data) {
+        number = data;
         if (required && number == null) {
             return false;
         }
