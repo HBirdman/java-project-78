@@ -23,8 +23,8 @@ public class ValidatorTest {
 
     @ParameterizedTest
     @CsvSource({
-            "true, pc, 3, pcGaming",
-            "false, pc, 10, cGaming"
+        "true, pc, 3, pcGaming",
+        "false, pc, 10, cGaming"
     })
     void testStringIsValid(boolean expected, String contains, int length, String text) {
         var actualSchema = v.string();
@@ -43,8 +43,8 @@ public class ValidatorTest {
 
     @ParameterizedTest
     @CsvSource({
-            "true, 5, 10, 10",
-            "false, 5, 0, -2"
+        "true, 5, 10, 10",
+        "false, 5, 0, -2"
     })
     void testNumberIsValid(boolean expected, int range1, int range2, int number) {
         var actualSchema = v.number();
