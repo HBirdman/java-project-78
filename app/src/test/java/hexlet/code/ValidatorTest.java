@@ -12,8 +12,8 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ValidatorTest {
-    static Validator v;
+final class ValidatorTest {
+    private static Validator v;
 
     @BeforeAll
     static void setup() {
