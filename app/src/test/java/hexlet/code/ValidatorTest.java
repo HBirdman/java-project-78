@@ -1,74 +1,69 @@
 package hexlet.code;
 
 import hexlet.code.schemas.BaseSchema;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ValidatorTest {
+    static Validator v;
 
-    @Test
-    public void testStringIsValidTrue() {
+    @BeforeAll
+    static void setup() {
+        v = new Validator();
+    }
+
+
+    @ParameterizedTest
+    @CsvSource({
+            "true, pc, 3, pcGaming",
+            "false, pc, 10, cGaming"
+    })
+    void testStringIsValid(boolean expected, String contains, int length, String text) {
+        var actualSchema = v.string();
+        var actual = actualSchema.contains(contains).minLength(length).required().isValid(text);
+        assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void testStringIsValidNullAndEmpty(String text) {
         boolean expected = true;
-        var actualSchema = new Validator().string();
-        var result = actualSchema.contains("ps").minLength(3).required().isValid("psgaming");
-        assertEquals(expected, result);
+        var actualSchema = v.string();
+        var actual = actualSchema.isValid(text);
+        assertEquals(expected, actual);
     }
 
-    @Test
-    public void testStringIsValidFalse() {
-        boolean expected = false;
-        var actualSchema = new Validator().string();
-        var result = actualSchema.contains("ps").minLength(10).required().isValid("sgaming");
-        assertEquals(expected, result);
-    }
-
-    @Test
-    public void testStringIsValidNull() {
-        boolean expected = true;
-        var actualSchema = new Validator().string();
-        var result = actualSchema.isValid(null);
-        assertEquals(expected, result);
-    }
-
-    @Test
-    public void testNumberIsValidTrue() {
-        boolean expected = true;
-        var actualSchema = new Validator().number();
-        var result = actualSchema.required().positive().range(5, 10).isValid(10);
-        assertEquals(expected, result);
-    }
-
-    @Test
-    public void testNumberIsValidFalse() {
-        boolean expected = false;
-        var actualSchema = new Validator().number();
-        var result = actualSchema.required().positive().range(5).isValid(1);
-        assertEquals(expected, result);
+    @ParameterizedTest
+    @CsvSource({
+            "true, 5, 10, 10",
+            "false, 5, 0, -2"
+    })
+    void testNumberIsValid(boolean expected, int range1, int range2, int number) {
+        var actualSchema = v.number();
+        var actual = actualSchema.required().positive().range(range1, range2).isValid(number);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testNumberIsValidNull() {
         boolean expected = true;
-        var actualSchema = new Validator().number();
+        var actualSchema = v.number();
         var result = actualSchema.positive().isValid(null);
-        assertEquals(expected, result);
-    }
-
-    @Test
-    public void testNumberIsValidFalse2() {
-        boolean expected = false;
-        var actualSchema = new Validator().number();
-        var result = actualSchema.positive().isValid(-2);
         assertEquals(expected, result);
     }
 
     @Test
     public void testMapIsValidTrue() {
         boolean expected = true;
-        var actualSchema = new Validator().map();
+        var actualSchema = v.map();
         var result = actualSchema.required().sizeof(2).isValid(Map.of("1", "1", "2", "2"));
         assertEquals(expected, result);
     }
@@ -76,7 +71,7 @@ public class ValidatorTest {
     @Test
     public void testMapIsValidFalse() {
         boolean expected = false;
-        var actualSchema = new Validator().map();
+        var actualSchema = v.map();
         var result = actualSchema.required().sizeof(2).isValid(Map.of("1", "1"));
         assertEquals(expected, result);
     }
@@ -84,7 +79,7 @@ public class ValidatorTest {
     @Test
     public void testMapIsValidNullTrue() {
         boolean expected = true;
-        var actualSchema = new Validator().map();
+        var actualSchema = v.map();
         var result = actualSchema.sizeof(2).isValid(null);
         assertEquals(expected, result);
     }
@@ -92,7 +87,7 @@ public class ValidatorTest {
     @Test
     public void testMapIsValidNullFalse() {
         boolean expected = false;
-        var actualSchema = new Validator().map();
+        var actualSchema = v.map();
         var result = actualSchema.required().sizeof(2).isValid(null);
         assertEquals(expected, result);
     }
@@ -100,7 +95,6 @@ public class ValidatorTest {
     @Test
     public void testMapIsValidShapeTrue() {
         boolean expected = true;
-        var v = new Validator();
         var actualSchema = v.map();
         Map<String, BaseSchema<String>> schemas = new HashMap<>();
         schemas.put("firstName", v.string().required());
@@ -113,7 +107,6 @@ public class ValidatorTest {
     @Test
     public void testMapIsValidShapeFalse() {
         boolean expected = false;
-        var v = new Validator();
         var actualSchema = v.map();
         Map<String, BaseSchema<String>> schemas = new HashMap<>();
         schemas.put("firstName", v.string().required());
@@ -126,7 +119,6 @@ public class ValidatorTest {
     @Test
     public void testMapIsValidShapeNull() {
         boolean expected = false;
-        var v = new Validator();
         var actualSchema = v.map();
         Map<String, BaseSchema<String>> schemas = new HashMap<>();
         schemas.put("firstName", v.string().required());
