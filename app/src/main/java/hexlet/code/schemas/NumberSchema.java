@@ -14,7 +14,7 @@ public class NumberSchema extends BaseSchema<Integer> {
         if (!required && number == null) {
             return true;
         }
-        if (positive && number < 0) {
+        if (positive && number < 1) {
             return false;
         }
         if (rangeMin != null && number < rangeMin) {
