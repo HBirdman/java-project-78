@@ -1,26 +1,24 @@
 package hexlet.code.schemas;
 
-public class NumberSchema extends BaseSchema<Integer> {
-    protected Integer number;
-    protected boolean positive = false;
-    protected Integer rangeMin;
-    protected Integer rangeMax;
+public final class NumberSchema extends BaseSchema<Integer> {
+    private boolean positive = false;
+    private Integer rangeMin;
+    private Integer rangeMax;
 
     public boolean isValid(Integer data) {
-        number = data;
-        if (required && number == null) {
+        if (required && data == null) {
             return false;
         }
-        if (!required && number == null) {
+        if (!required && data == null) {
             return true;
         }
-        if (positive && number < 1) {
+        if (positive && data < 1) {
             return false;
         }
-        if (rangeMin != null && number < rangeMin) {
+        if (rangeMin != null && data < rangeMin) {
             return false;
         }
-        return rangeMax == null || number <= rangeMax;
+        return rangeMax == null || data <= rangeMax;
     }
 
     public NumberSchema required() {

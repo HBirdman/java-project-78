@@ -3,35 +3,33 @@ package hexlet.code.schemas;
 import java.util.Map;
 import java.util.Set;
 
-public class MapSchema extends BaseSchema<Map<String, String>> {
-    protected Map<String, String> map;
-    protected Integer sizeof;
-    protected boolean shape;
-    protected Set<Map.Entry<String, BaseSchema<String>>> schemasSet;
+public final class MapSchema extends BaseSchema<Map<String, String>> {
+    private Integer sizeof;
+    private boolean shape;
+    private Set<Map.Entry<String, BaseSchema<String>>> schemasSet;
 
     public boolean isValid(Map<String, String> data) {
-        map = data;
-        if (required && map == null) {
+        if (required && data == null) {
             return false;
         }
-        if (!required && map == null) {
+        if (!required && data == null) {
             return true;
         }
         if (shape) {
             String mapKey;
             String mapValue;
             for (var schema : schemasSet) {
-                if (!map.containsKey(schema.getKey()) && schema.getValue().required) {
+                if (!data.containsKey(schema.getKey()) && schema.getValue().required) {
                     return false;
                 }
                 mapKey = schema.getKey();
-                mapValue = map.get(mapKey);
+                mapValue = data.get(mapKey);
                 if (!schema.getValue().isValid(mapValue)) {
                     return false;
                 }
             }
         }
-        return sizeof == null || map.size() == sizeof;
+        return sizeof == null || data.size() == sizeof;
     }
 
     public MapSchema required() {
