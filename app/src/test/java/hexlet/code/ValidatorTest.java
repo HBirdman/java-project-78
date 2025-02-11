@@ -37,7 +37,7 @@ public class ValidatorTest {
     public void testNumberIsValidTrue() {
         boolean expected = true;
         var actualSchema = new Validator().number();
-        var result = actualSchema.required().positive().range(5, 10).isValid(5);
+        var result = actualSchema.required().positive().range(5, 10).isValid(10);
         assertEquals(expected, result);
     }
 
@@ -45,7 +45,7 @@ public class ValidatorTest {
     public void testNumberIsValidFalse() {
         boolean expected = false;
         var actualSchema = new Validator().number();
-        var result = actualSchema.required().positive().range(5).isValid(0);
+        var result = actualSchema.required().positive().range(5).isValid(1);
         assertEquals(expected, result);
     }
 

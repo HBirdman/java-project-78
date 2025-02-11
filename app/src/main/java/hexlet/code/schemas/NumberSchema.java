@@ -20,7 +20,7 @@ public class NumberSchema extends BaseSchema<Integer> {
         if (rangeMin != null && number < rangeMin) {
             return false;
         }
-        return rangeMax == null || number < rangeMax;
+        return rangeMax == null || number <= rangeMax;
     }
 
     public NumberSchema required() {
