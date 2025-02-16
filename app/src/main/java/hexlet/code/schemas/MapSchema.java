@@ -4,10 +4,12 @@ import java.util.Map;
 
 public final class MapSchema extends BaseSchema<Map<String, String>> {
 
+    @Override
     public boolean isValid(Map<String, String> data) {
         return super.isValid(data);
     }
 
+    @Override
     public MapSchema required() {
         return (MapSchema) super.required();
     }

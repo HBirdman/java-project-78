@@ -1,14 +1,13 @@
 package hexlet.code.schemas;
 
-import lombok.Getter;
-
-@Getter
 public final class StringSchema extends BaseSchema<String> {
 
+    @Override
     public boolean isValid(String data) {
         return super.isValid(data);
     }
 
+    @Override
     public StringSchema required() {
         return (StringSchema) super.required();
     }

@@ -2,10 +2,12 @@ package hexlet.code.schemas;
 
 public final class NumberSchema extends BaseSchema<Integer> {
 
+    @Override
     public boolean isValid(Integer data) {
         return super.isValid(data);
     }
 
+    @Override
     public NumberSchema required() {
         return (NumberSchema) super.required();
     }
