@@ -8,6 +8,11 @@ public class BaseSchema<T> {
     protected Map<String, Object> schema = new HashMap<>();
     protected Set<Map.Entry<String, BaseSchema<String>>> nestedSchemas;
 
+    /**
+     * This method checks whether the provided data matches the selected data conditions.
+     * @param data - can be String, Integer, int or Map type
+     * @return boolean
+     */
     public boolean isValid(T data) {
         if (schema.containsKey("required") && (data == null || data.equals(""))) {
             return false;
@@ -49,6 +54,10 @@ public class BaseSchema<T> {
         return true;
     }
 
+    /**
+     * This method adds check for not Null condition for data.
+     * @return BaseSchema<T></T>
+     */
     public BaseSchema<T> required() {
         schema.put("required", true);
         return this;
