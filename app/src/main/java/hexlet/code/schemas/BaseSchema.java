@@ -56,7 +56,7 @@ public class BaseSchema<T> {
 
     /**
      * This method adds check for not Null condition for data.
-     * @return BaseSchema<T></T>
+     * @return BaseSchema<T>
      */
     public BaseSchema<T> required() {
         schema.put("required", true);
