@@ -1,31 +1,25 @@
 package hexlet.code.schemas;
 
+import lombok.Getter;
+
+@Getter
 public final class StringSchema extends BaseSchema<String> {
-    private Integer minLength;
-    private String contains;
 
     public boolean isValid(String data) {
-        if (required && (data == null || data.isEmpty())) {
-            return false;
-        }
-        if (minLength != null && minLength > 0 && minLength > data.length()) {
-            return false;
-        }
-        return contains == null || data.contains(contains);
+        return super.isValid(data);
     }
 
     public StringSchema required() {
-        required = true;
-        return this;
+        return (StringSchema) super.required();
     }
 
     public StringSchema minLength(int length) {
-        minLength = length;
+        schema.put("minLength", length);
         return this;
     }
 
     public StringSchema contains(String letters) {
-        contains = letters;
+        schema.put("contains", letters);
         return this;
     }
 }
