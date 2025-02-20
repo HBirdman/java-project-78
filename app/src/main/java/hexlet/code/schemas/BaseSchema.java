@@ -14,10 +14,10 @@ public class BaseSchema<T> {
      * @return boolean
      */
     public boolean isValid(T data) {
-        if (schemas.containsKey("required") && data == null) {
+        if (schemas.containsKey("required") && (data == null || data.equals(""))) {
             return false;
         }
-        if (!schemas.containsKey("required") && data == null || data.equals("")) {
+        if (!schemas.containsKey("required") && (data == null || data.equals(""))) {
             return true;
         }
         Set<Map.Entry<String, Predicate<T>>> schemasSet = schemas.entrySet();

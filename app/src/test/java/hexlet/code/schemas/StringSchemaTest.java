@@ -2,6 +2,7 @@ package hexlet.code.schemas;
 
 import hexlet.code.Validator;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -18,8 +19,8 @@ final class StringSchemaTest {
     @ParameterizedTest
     @CsvSource({
         "true, pc, 3, pcGaming",
-        "false, pc, 10, cGaming",
-        "false, pc, 10, pcGaming"
+        "false, pc, 6, cGaming",
+        "true, pc, 8, pcGaming"
     })
     void testStringIsValid(boolean expected, String contains, int length, String text) {
         StringSchema actualSchema = v.string();
@@ -36,6 +37,16 @@ final class StringSchemaTest {
         StringSchema actualSchema = v.string();
 
         boolean actual = actualSchema.isValid(text);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testStringIsValidRequiredAndEmpty() {
+        boolean expected = false;
+        StringSchema actualSchema = v.string();
+
+        boolean actual = actualSchema.contains("con").minLength(5).required().isValid("");
 
         assertEquals(expected, actual);
     }
