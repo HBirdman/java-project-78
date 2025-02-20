@@ -13,12 +13,12 @@ public final class StringSchema extends BaseSchema<String> {
     }
 
     public StringSchema minLength(int length) {
-        schema.put("minLength", length);
+        schemas.put("minLength", (d) -> d.length() < length);
         return this;
     }
 
     public StringSchema contains(String letters) {
-        schema.put("contains", letters);
+        schemas.put("contains", (d) -> !d.contains(letters));
         return this;
     }
 }

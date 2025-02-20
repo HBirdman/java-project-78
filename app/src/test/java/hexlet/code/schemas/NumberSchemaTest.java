@@ -22,9 +22,9 @@ final class NumberSchemaTest {
         "false, 3, 6, 1"
     })
     void testNumberIsValid(boolean expected, int range1, int range2, int number) {
-        var actualSchema = v.number();
+        NumberSchema actualSchema = v.number();
 
-        var actual = actualSchema.required().positive().range(range1, range2).isValid(number);
+        boolean actual = actualSchema.required().positive().range(range1, range2).isValid(number);
 
         assertEquals(expected, actual);
     }
@@ -32,9 +32,9 @@ final class NumberSchemaTest {
     @Test
     public void testNumberIsValidNull() {
         boolean expected = true;
-        var actualSchema = v.number();
+        NumberSchema actualSchema = v.number();
 
-        var result = actualSchema.positive().isValid(null);
+        boolean result = actualSchema.positive().isValid(null);
 
         assertEquals(expected, result);
     }

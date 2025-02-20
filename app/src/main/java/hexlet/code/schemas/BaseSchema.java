@@ -3,10 +3,10 @@ package hexlet.code.schemas;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class BaseSchema<T> {
-    protected Map<String, Object> schema = new HashMap<>();
-    protected Set<Map.Entry<String, BaseSchema<String>>> nestedSchemas;
+    protected Map<String, Predicate<T>> schemas = new HashMap<>();
 
     /**
      * This method checks whether the provided data matches the selected data conditions.
@@ -14,42 +14,18 @@ public class BaseSchema<T> {
      * @return boolean
      */
     public boolean isValid(T data) {
-        if (schema.containsKey("required") && (data == null || data.equals(""))) {
+        if (schemas.containsKey("required") && data == null) {
             return false;
         }
-        if (!schema.containsKey("required") && data == null) {
+        if (!schemas.containsKey("required") && data == null || data.equals("")) {
             return true;
         }
-        if (data instanceof Integer) {
-            if (schema.containsKey("positive") && (int) data < 1) {
+        Set<Map.Entry<String, Predicate<T>>> schemasSet = schemas.entrySet();
+        for (Map.Entry<String, Predicate<T>> schema : schemasSet) {
+            boolean testCondition = schema.getValue().test(data);
+            if (testCondition) {
                 return false;
             }
-            if (schema.containsKey("rangeMin") && (int) data < (int) schema.get("rangeMin")) {
-                return false;
-            }
-            return !schema.containsKey("rangeMax") || (int) data <= (int) schema.get("rangeMax");
-        }
-        if (data instanceof String) {
-            if (schema.containsKey("minLength") && (int) schema.get("minLength") > ((String) data).length()) {
-                return false;
-            }
-            return schema.get("contains") == null || ((String) data).contains((String) schema.get("contains"));
-        }
-        if (data instanceof Map<?, ?>) {
-            if (schema.containsKey("shape")) {
-                for (var nestedSchema : nestedSchemas) {
-                    String mapKey = nestedSchema.getKey();
-                    String mapValue = (String) ((Map<?, ?>) data).get(mapKey);
-                    if (!((Map<?, ?>) data).containsKey(mapKey)
-                            && nestedSchema.getValue().schema.containsKey("required")) {
-                        return false;
-                    }
-                    if (!nestedSchema.getValue().isValid(mapValue)) {
-                        return false;
-                    }
-                }
-            }
-            return !schema.containsKey("sizeof") || ((Map<?, ?>) data).size() == (int) schema.get("sizeof");
         }
         return true;
     }
@@ -59,7 +35,7 @@ public class BaseSchema<T> {
      * @return BaseSchema<T>
      */
     public BaseSchema<T> required() {
-        schema.put("required", true);
+        schemas.put("required", (d) -> d == null || d.equals(""));
         return this;
     }
 }

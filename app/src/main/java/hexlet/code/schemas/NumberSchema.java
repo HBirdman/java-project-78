@@ -13,18 +13,18 @@ public final class NumberSchema extends BaseSchema<Integer> {
     }
 
     public NumberSchema positive() {
-        schema.put("positive", true);
+        schemas.put("positive", (d) -> d < 1);
         return this;
     }
 
     public NumberSchema range(int rangeMin, int rangeMax) {
-        schema.put("rangeMin", rangeMin);
-        schema.put("rangeMax", rangeMax);
+        schemas.put("rangeMin", (d) -> d < rangeMin);
+        schemas.put("rangeMax", (d) -> d > rangeMax);
         return this;
     }
 
     public NumberSchema range(int rangeMin) {
-        schema.put("rangeMin", rangeMin);
+        schemas.put("rangeMin", (d) -> d < rangeMin);
         return this;
     }
 }

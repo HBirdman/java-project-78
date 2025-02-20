@@ -22,9 +22,9 @@ final class StringSchemaTest {
         "false, pc, 10, pcGaming"
     })
     void testStringIsValid(boolean expected, String contains, int length, String text) {
-        var actualSchema = v.string();
+        StringSchema actualSchema = v.string();
 
-        var actual = actualSchema.contains(contains).minLength(length).required().isValid(text);
+        boolean actual = actualSchema.contains(contains).minLength(length).required().isValid(text);
 
         assertEquals(expected, actual);
     }
@@ -33,9 +33,9 @@ final class StringSchemaTest {
     @NullAndEmptySource
     void testStringIsValidNullAndEmpty(String text) {
         boolean expected = true;
-        var actualSchema = v.string();
+        StringSchema actualSchema = v.string();
 
-        var actual = actualSchema.isValid(text);
+        boolean actual = actualSchema.isValid(text);
 
         assertEquals(expected, actual);
     }

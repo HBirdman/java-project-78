@@ -23,9 +23,9 @@ final class MapSchemaTest {
         "false, 3, key1, value1, key2, value2"
     })
     void testMapIsValid(boolean expected, int sizeof, String key1, String value1, String key2, String value2) {
-        var actualSchema = v.map();
+        MapSchema actualSchema = v.map();
 
-        var actual = actualSchema.required().sizeof(sizeof).isValid(Map.of(key1, value1, key2, value2));
+        boolean actual = actualSchema.required().sizeof(sizeof).isValid(Map.of(key1, value1, key2, value2));
 
         assertEquals(expected, actual);
     }
@@ -33,16 +33,33 @@ final class MapSchemaTest {
     @ParameterizedTest
     @CsvSource({
         "true, firstName, lastName, John, Smith",
-        "false, firstName, lastName, Anna, B"
+        "false, firstName, lastName, Anna, B",
     })
     void testMapIsValidShape(boolean expected, String key1, String key2, String value1, String value2) {
-        var actualSchema = v.map();
+        MapSchema actualSchema = v.map();
         Map<String, BaseSchema<String>> schemas = new HashMap<>();
         schemas.put(key1, v.string().required());
         schemas.put(key2, v.string().required().minLength(2));
         actualSchema.shape(schemas);
 
-        var result = actualSchema.isValid(Map.of(key1, value1, key2, value2));
+        boolean result = actualSchema.isValid(Map.of(key1, value1, key2, value2));
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testMapIsValidShapeWrongKey() {
+        boolean expected = false;
+        MapSchema actualSchema = v.map();
+        Map<String, BaseSchema<String>> schemas = new HashMap<>();
+        schemas.put("firstName", v.string().required());
+        schemas.put("lastName", v.string().required().minLength(2));
+        actualSchema.shape(schemas);
+        Map<String, String> human1 = new HashMap<>();
+        human1.put("firstName", "John");
+        human1.put("wrongKey", "Snow");
+
+        boolean result = actualSchema.isValid(human1);
 
         assertEquals(expected, result);
     }
@@ -50,7 +67,7 @@ final class MapSchemaTest {
     @Test
     public void testMapIsValidShapeNull() {
         boolean expected = false;
-        var actualSchema = v.map();
+        MapSchema actualSchema = v.map();
         Map<String, BaseSchema<String>> schemas = new HashMap<>();
         schemas.put("firstName", v.string().required());
         schemas.put("lastName", v.string().required().minLength(2));
@@ -59,7 +76,7 @@ final class MapSchemaTest {
         human1.put("firstName", "John");
         human1.put("lastName", null);
 
-        var result = actualSchema.isValid(human1);
+        boolean result = actualSchema.isValid(human1);
 
         assertEquals(expected, result);
     }
@@ -68,9 +85,9 @@ final class MapSchemaTest {
     @Test
     public void testMapIsValidNullTrue() {
         boolean expected = true;
-        var actualSchema = v.map();
+        MapSchema actualSchema = v.map();
 
-        var result = actualSchema.sizeof(2).isValid(null);
+        boolean result = actualSchema.sizeof(2).isValid(null);
 
         assertEquals(expected, result);
     }
@@ -78,9 +95,9 @@ final class MapSchemaTest {
     @Test
     public void testMapIsValidNullFalse() {
         boolean expected = false;
-        var actualSchema = v.map();
+        MapSchema actualSchema = v.map();
 
-        var result = actualSchema.required().sizeof(2).isValid(null);
+        boolean result = actualSchema.required().sizeof(2).isValid(null);
 
         assertEquals(expected, result);
     }
