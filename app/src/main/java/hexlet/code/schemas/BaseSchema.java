@@ -9,9 +9,6 @@ public class BaseSchema<T> {
     protected Map<String, Predicate<T>> schemas = new HashMap<>();
     protected boolean isRequired = false;
 
-    void setIsRequired() {
-        isRequired = true;
-    }
     /**
      * This method checks whether the provided data matches the selected data conditions.
      * @param data - can be String, Integer, int or Map type
@@ -31,6 +28,13 @@ public class BaseSchema<T> {
             }
         }
         return true;
+    }
+
+    /**
+     * This method changes field isRequired to TRUE.
+     */
+    void setIsRequired() {
+        isRequired = true;
     }
 
     /**
